@@ -6,7 +6,7 @@ import inspect
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 class Log:
-    def __init__(self, loglevel=6, tofile=False, log_filename='mopy.log') -> None:
+    def __init__(self, loglevel=6, tofile=False, showline=False, log_filename='mopy.log') -> None:
         """Print or Save to a log file.
         
         | Log Level | Log Type      | Print Color | Background Color |
@@ -30,6 +30,7 @@ class Log:
         self.loglevel = loglevel
         self.tofile = tofile
         self.logfile = log_filename
+        self.showline = showline
         self.color_lookup = {
             'emergency' : {'color' : '\033[30;41m' , 'loglevel' : 0},
             'alert'     : {'color' : '\033[30;43m' , 'loglevel' : 1},
@@ -43,18 +44,18 @@ class Log:
         }
         pass
 
-    def get_vars(self, message):
-        self.text_color = self.color_lookup.get(type.lower()).get('color')
-        self.method_called_from = inspect.stack()[1][3]
-        self.file_called_from = os.path.basename(sys.argv[0])
+    def get_vars(self):
+        self.text_color = self.color_lookup.get(self.log_type.lower()).get('color')
+        self.method_called_from = path_taken = ' > '.join([f"{_func.filename.split('/')[-1].split('.')[0]}.{_func.function}|Line -> {_func.lineno}" for _func in inspect.stack()[3:]]) # pardon me lol
+        self.file_called_from = ' > '.join(set([f"{_func.filename.split('/')[-1]}" for _func in inspect.stack()[3:-1]]))
         self.date_time = str(dt.datetime.now())[0:19]
-
-    def print_log(self, log_type, message):
-        self.get_vars(message)
-        if self.loglevel >= self.color_lookup.get(log_type.lower()).get('loglevel'):
-            print(f'{self.text_color}{self.date_time} [{log_type.upper()}] ({self.file_called_from} > {self.method_called_from}): {message}\033[00m')
+    
+    def print_log(self, message):
+        self.get_vars()
+        if self.loglevel >= self.color_lookup.get(self.log_type.lower()).get('loglevel'):
+            print(f'{self.text_color}{self.date_time} [{self.log_type.upper()}] ({self.file_called_from}) > ({self.method_called_from}): {message}\033[00m')
         if self.tofile:
-            with open(self.logfile, 'a') as _l: _l.write(f'{self.date_time} [{log_type.upper()}] ({self.file_called_from} > {self.method_called_from}): {message}\n')
+            with open(self.logfile, 'a') as _l: _l.write(f'{self.date_time} [{self.log_type.upper()}] ({self.file_called_from}) > ({self.method_called_from}): {message}\n')
     
     def emergency(self, message):
         """Emergency Message
@@ -63,8 +64,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def alert(self, message):
         """Alert Message
@@ -73,9 +74,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def critical(self, message):
         """Critical Message
@@ -84,9 +84,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def error(self, message):
         """Error Message
@@ -95,9 +94,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
     
     def warning(self, message):
         """Warning Message
@@ -106,9 +104,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def notice(self, message):
         """Notice
@@ -117,9 +114,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def debug(self, message):
         """Debug Message
@@ -128,9 +124,8 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
     def info(self, message):
         """Info Message
@@ -139,13 +134,17 @@ class Log:
         ----------
         message : str > message to print
         """
-        
-        log_type = inspect.stack()[0][3]
-        self.print_log(log_type, message)
+        self.log_type = inspect.stack()[0][3]
+        self.print_log(message)
             
 def main():
     log = Log()
-    log.debug('Test Debug Message', 'log.py')
+    log.debug('Test Debug Message')
+
+def test():
+    # a = inspect.stack()
+    path_taken = ' > '.join([_func.function for _func in inspect.stack()])
+    print(path_taken)
 
 if __name__ == '__main__':
-    main()
+    test()
