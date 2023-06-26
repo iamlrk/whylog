@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.1 - Beta' 
+VERSION = '0.3' 
 DESCRIPTION = 'Prints out a log message to terminal in color'
 with open('README.md', 'r') as r:
     LONG_DESCRIPTION = r.read()
@@ -20,8 +20,9 @@ setup(
 
         keywords=['python', 'logging', 'log', 'print'],
         classifiers= [
-            f"Development Status :: {VERSION}",
+            "License :: OSI Approved :: MIT License",
+            "Development Status :: 4 - Beta",
             "Programming Language :: Python :: 3",
-            "Operating System :: Microsoft :: Windows",
+            "Operating System :: OS Independent",
         ]
 )

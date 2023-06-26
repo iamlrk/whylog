@@ -1,0 +1,1 @@
+from nlog.src.nlog import Log

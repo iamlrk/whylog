@@ -1,4 +1,4 @@
-from ylog import Log
+from nlog import Log
 
 def main():
     test()
