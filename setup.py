@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.3' 
+VERSION = '0.5' 
 DESCRIPTION = 'Prints out a log message to terminal in color'
 with open('README.md', 'r') as r:
     LONG_DESCRIPTION = r.read()
@@ -10,7 +10,7 @@ setup(
        # the name must match the folder name 'simpleopers'
         name="ylog", 
         version=VERSION,
-        author="Ramkiran Lepakshi",
+        author="iamlrk",
         author_email="<lepakshiramkiran@hotmail.com>",
         url = 'https://github.com/iamlrk/ylog',
         description=DESCRIPTION,
