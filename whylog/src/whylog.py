@@ -6,7 +6,7 @@ import inspect
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 class Log:
-    def __init__(self, loglevel=6, tofile=False, showline=False, log_filename='mopy.log') -> None:
+    def __init__(self, loglevel=6, tofile=False, showline=False, log_filename='mylog.log') -> None:
         """Print or Save to a log file.
         
         | Log Level | Log Type      | Print Color | Background Color |
@@ -17,8 +17,8 @@ class Log:
         |         3 | Error         | Red         | No Color         |
         |         4 | Warning       | Yellow      | No Color         |
         |         5 | Notice        | White       | Blue             |
-        |         6 | Debug         | Cyan        | No Color         |
-        |         7 | Informational | White       | No Color         |
+        |         6 | Informational | Green       | No Color         |
+        |         7 | Debug         | Cyan        | No Color         |
         |         8 | None          | NA          | NA               |
  
         
@@ -38,7 +38,7 @@ class Log:
             'error'     : {'color' : '\033[31m'    , 'loglevel' : 3},
             'warning'   : {'color' : '\033[33m'    , 'loglevel' : 4},
             'notice'    : {'color' : '\033[37;44m' , 'loglevel' : 5},
-            'info'      : {'color' : ''            , 'loglevel' : 6},          # '\033[32m',
+            'info'      : {'color' : '\033[32m'    , 'loglevel' : 6},          # '\033[32m',
             'debug'     : {'color' : '\033[36m'    , 'loglevel' : 7},
             # 'process'   : '\033[35m',
         }
@@ -46,14 +46,14 @@ class Log:
 
     def get_vars(self):
         self.text_color = self.color_lookup.get(self.log_type.lower()).get('color')
-        self.method_called_from = path_taken = ' > '.join([f"{_func.filename.split('/')[-1].split('.')[0]}.{_func.function}|Line -> {_func.lineno}" for _func in inspect.stack()[3:]]) # pardon me lol
+        self.method_called_from = path_taken = ' > '.join([f"{_func.filename.split('/')[-1].split('.')[0]}.{_func.function}|Line -> {_func.lineno}" for _func in inspect.stack()[3:]]) # pardon me lol; need to make this not messy. job for future me.
         self.file_called_from = ' > '.join(set([f"{_func.filename.split('/')[-1]}" for _func in inspect.stack()[3:-1]]))
         self.date_time = str(dt.datetime.now())[0:19]
     
     def print_log(self, message):
         self.get_vars()
         if self.loglevel >= self.color_lookup.get(self.log_type.lower()).get('loglevel'):
-            print(f'{self.text_color}{self.date_time} [{self.log_type.upper()}] ({self.file_called_from}) > ({self.method_called_from}): {message}\033[00m')
+            print(f'{self.text_color}{self.date_time} [{self.log_type.upper()}] ({self.file_called_from}) > ({self.method_called_from}):\033[00m {message}')
         if self.tofile:
             with open(self.logfile, 'a') as _l: _l.write(f'{self.date_time} [{self.log_type.upper()}] ({self.file_called_from}) > ({self.method_called_from}): {message}\n')
     

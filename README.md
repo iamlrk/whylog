@@ -1,4 +1,4 @@
-# ylog
+# whylog
 
 This is an library to print color-coded log messages to the terminal. It prints in the following format.
 
@@ -24,18 +24,24 @@ Print or Save to a log file.
 ### Code
 
 ```python
-from ylog import Log
+from whylog import Log
 
-log = Log(loglevel=8)
+def main():
+    test()
 
-log.emergency('Test emergency Print by importing')
-log.alert('Test alert Print by importing')
-log.critical('Test crtical Print by importing')
-log.error('Test error Print by importing')
-log.warning('Test warning Print by importing')
-log.notice('Test notice Print by importing')
-log.debug('Test Debug Print by importing')
-log.info('Test info Print by importing')
+def test():
+    log = Log(loglevel=8)
+    log.emergency('Test emergency Print by importing')
+    log.alert('Test alert Print by importing')
+    log.critical('Test crtical Print by importing')
+    log.error('Test error Print by importing')
+    log.warning('Test warning Print by importing')
+    log.notice('Test notice Print by importing')
+    log.debug('Test Debug Print by importing')
+    log.info('Test info Print by importing')
+
+if __name__ == '__main__':
+    main()
 ```
 
 ### Output
